@@ -232,6 +232,8 @@ contract LastSlugFeeTest is Test, Deployers {
 
         uint256 airlockBalanceNumeraireAfter = numeraireToken.balanceOf(address(airlock));
         uint256 airlockBalanceAssetAfter = IERC20(asset).balanceOf(address(airlock));
+
+        // reverts since fee distribution is incorrect and only pays out the last slug of fees
         assertEq(airlockBalanceNumeraireAfter, 0, "numeraire balance after migrate");
         assertEq(airlockBalanceAssetAfter, 0, "asset balance after migrate");
     }
