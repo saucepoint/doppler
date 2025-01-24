@@ -9,6 +9,8 @@ import { IPoolInitializer } from "src/interfaces/IPoolInitializer.sol";
 import { ILiquidityMigrator } from "src/interfaces/ILiquidityMigrator.sol";
 import { DERC20 } from "src/DERC20.sol";
 
+import "forge-std/console2.sol";
+
 enum ModuleState {
     NotWhitelisted,
     TokenFactory,
@@ -220,8 +222,13 @@ contract Airlock is Ownable {
         uint256 protocolLpFees0 = fees0 * 5 / 100;
         uint256 protocolLpFees1 = fees1 * 5 / 100;
 
-        uint256 protocolProceedsFees0 = fees0 > 0 ? (balance0 - fees0) / 1000 : 0;
-        uint256 protocolProceedsFees1 = fees1 > 0 ? (balance1 - fees1) / 1000 : 0;
+        // uint256 protocolProceedsFees0 = fees0 > 0 ? (balance0 - fees0) / 1000 : 0;
+        // uint256 protocolProceedsFees1 = fees1 > 0 ? (balance1 - fees1) / 1000 : 0;
+        // mock these to zeros for the POC
+        // (hitting a case where 1000th of the principal delta (balance - fees) is MORE than the fees)
+        // (causing overflow on `fees1 - protocolFees1`)
+        uint256 protocolProceedsFees0 = 0;
+        uint256 protocolProceedsFees1 = 0;
 
         uint256 protocolFees0 = protocolLpFees0 > protocolProceedsFees0 ? protocolLpFees0 : protocolProceedsFees0;
         uint256 protocolFees1 = protocolLpFees1 > protocolProceedsFees1 ? protocolLpFees1 : protocolProceedsFees1;
